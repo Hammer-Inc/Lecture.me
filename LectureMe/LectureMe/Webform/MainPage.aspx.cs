@@ -9,6 +9,8 @@ using LectureMe.Model;
 using System.Web.Script.Serialization;
 using Newtonsoft.Json.Linq;
 using System.Threading.Tasks;
+using Ionic.Zip;
+using System.Web;
 
 namespace LectureMe.Webform
 {
@@ -17,7 +19,6 @@ namespace LectureMe.Webform
         const string subscriptionKey = "04d57b905eee48e980fcecd95007e0a7";
         const string uriBase = "https://westcentralus.api.cognitive.microsoft.com/face/v1.0/detect";
         
-
         String[] values;
         
         protected void Page_Load(object sender, EventArgs e)
@@ -31,30 +32,46 @@ namespace LectureMe.Webform
             {
                 try
                 {
-                    string filename = Path.GetFileName(FileUpload.FileName);
-                    FileUpload.SaveAs(Server.MapPath("../Picture/") + filename);
-
-                    var task = Task.Run(async () => { await MakeAnalysisRequest(Server.MapPath("../Picture/") + filename); });
-                    task.Wait();
+                    int fileCount = FileUpload.PostedFiles.Count;
                     
-                    string inputString;
-                    
-                    using (StreamReader streamReader = File.OpenText(Server.MapPath("../File/file.txt")))
+                    foreach (HttpPostedFile postfiles in FileUpload.PostedFiles)
                     {
-                        while ((inputString = streamReader.ReadLine()) != null)
-                        {
-                            values = inputString.Split(',');
-                        }                            
-                    }
+                        string filename = Path.GetFileName(postfiles.FileName);
+                        postfiles.SaveAs(Server.MapPath("../Picture/") + filename);
+                        
+                        /*string[] fullFile =  filename.Split('.');
+                        string extension = fullFile[fullFile.Length - 1];
 
-                    cht_BarCategory.Series[0].Points.AddXY("Anger", decimal.Parse(values[0]) * 10);
-                    cht_BarCategory.Series[0].Points.AddXY("Contempt", decimal.Parse(values[1]) * 10);
-                    cht_BarCategory.Series[0].Points.AddXY("Disgust", decimal.Parse(values[2]) * 10);
-                    cht_BarCategory.Series[0].Points.AddXY("Fear", decimal.Parse(values[3]) * 10);
-                    cht_BarCategory.Series[0].Points.AddXY("Happiness", decimal.Parse(values[4]) * 10);
-                    cht_BarCategory.Series[0].Points.AddXY("Neutral", decimal.Parse(values[5]) * 10);
-                    cht_BarCategory.Series[0].Points.AddXY("Sadness", decimal.Parse(values[6]) * 10);
-                    cht_BarCategory.Series[0].Points.AddXY("Surprise", decimal.Parse(values[7]) * 10);
+                        if (extension == "zip")
+                        {
+                            using (ZipFile zip = ZipFile.Read(FileUpload.PostedFile.InputStream))
+                            {
+                                zip.ExtractAll(Server.MapPath("../Picture/"), ExtractExistingFileAction.OverwriteSilently);
+                            }
+                        }*/
+
+                        var task = Task.Run(async () => { await MakeAnalysisRequest(Server.MapPath("../Picture/") + filename); });
+                        task.Wait();
+                        
+                        string inputString;
+
+                        using (StreamReader streamReader = File.OpenText(Server.MapPath("../File/file.txt")))
+                        {
+                            while ((inputString = streamReader.ReadLine()) != null)
+                            {
+                                values = inputString.Split(',');
+                            }
+                        }
+
+                        cht_BarCategory.Series[0].Points.AddXY("Anger", decimal.Parse(values[0]) * 10);
+                        cht_BarCategory.Series[0].Points.AddXY("Contempt", decimal.Parse(values[1]) * 10);
+                        cht_BarCategory.Series[0].Points.AddXY("Disgust", decimal.Parse(values[2]) * 10);
+                        cht_BarCategory.Series[0].Points.AddXY("Fear", decimal.Parse(values[3]) * 10);
+                        cht_BarCategory.Series[0].Points.AddXY("Happiness", decimal.Parse(values[4]) * 10);
+                        cht_BarCategory.Series[0].Points.AddXY("Neutral", decimal.Parse(values[5]) * 10);
+                        cht_BarCategory.Series[0].Points.AddXY("Sadness", decimal.Parse(values[6]) * 10);
+                        cht_BarCategory.Series[0].Points.AddXY("Surprise", decimal.Parse(values[7]) * 10);
+                    }
                 }
                 catch (Exception ex)
                 {
