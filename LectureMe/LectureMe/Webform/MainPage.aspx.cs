@@ -1,4 +1,5 @@
 ﻿using System;
+using System.Web.Hosting;
 using System.Web.UI.WebControls;
 using System.IO;
 using System.Net.Http;
@@ -16,10 +17,12 @@ namespace LectureMe.Webform
         const string subscriptionKey = "04d57b905eee48e980fcecd95007e0a7";
         const string uriBase = "https://westcentralus.api.cognitive.microsoft.com/face/v1.0/detect";
         
+
         String[] values;
         
         protected void Page_Load(object sender, EventArgs e)
         {
+            
         }
 
         protected void btn_Upload_Click(object sender, EventArgs e)
@@ -112,7 +115,7 @@ namespace LectureMe.Webform
                     myEmotion.sadness = emotion["sadness"];
                     myEmotion.surprise = emotion["surprise"];
                     
-                    using (StreamWriter writer = new StreamWriter(@"C:\Users\ssabd\documents\visual studio 2017\Projects\LectureMe\LectureMe\File\file.txt", true))
+                    using (StreamWriter writer = new StreamWriter(HostingEnvironment.ApplicationPhysicalPath + "File/file.txt" , true))
                     {
                         writer.WriteLine(myEmotion.anger + "," + myEmotion.contempt + "," + myEmotion.disgust + "," + myEmotion.fear + "," + myEmotion.happiness + "," + myEmotion.neutral + "," + myEmotion.sadness + "," + myEmotion.surprise);
                     }
