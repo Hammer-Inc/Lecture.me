@@ -8,40 +8,47 @@
 <head runat="server">
     <title></title>
     <link href="https://maxcdn.bootstrapcdn.com/bootstrap/3.3.7/css/bootstrap.min.css" rel="stylesheet" type="text/css" />
+    <style>
+        .img-centered {
+            margin: auto;
+        }
+    </style>
 </head>
 <body>
     <form id="form1" runat="server">
         <div class="row">
-            <div class="col-md-6">
+            <asp:Image runat="server" ImageUrl="~/Images/Banner.png" CssClass="img-responsive img-centered" />
+           
+            <div class="col-md-12">
                 <div class="panel panel-primary">
                     <div class="panel-heading">
-                        <h3 class="panel-title">Lecture World</h3>
+                        <h3 class="panel-title">Boredom Level of Lecture</h3>
                     </div>
                     <div class="panel-body">
-                        <div class="form-group">
-                            <asp:FileUpload ID="FileUpload" runat="server" AllowMultiple="true"/>
-                            <br />
-                            <asp:Button runat="server" ID="btn_Upload" Text="Upload" CssClass="btn btn-success" OnClick="btn_Upload_Click" />
-                            <br />
-                            <asp:Label ID="lbl_Message" runat="server"></asp:Label>
-                        </div>
-                        <div class="form-group">
-                            <asp:Chart ID="cht_BarCategory" Height="400px" Width="480px" runat="server">
-                               <Series>
-                                    <asp:Series Name="main_Series" ChartType="Line" Font="Trebuchet MS, 12pt, style=Bold" ChartArea="main_Area" IsValueShownAsLabel="true"></asp:Series>
-                               </Series>
+                        <div class="form-inline">
+                            <div class="form-group">
+                                <asp:FileUpload ID="FileUpload" runat="server" AllowMultiple="true"/>
+                                <br />
+                                <asp:Button runat="server" ID="btn_Upload" Text="Upload" CssClass="btn btn-success" OnClick="btn_Upload_Click" />
+                            </div>
+                            <div class="form-group">
+                                <asp:Chart ID="cht_BarCategory" Height="400px" Width="480px" runat="server">
+                                   <Series>
+                                        <asp:Series Name="main_Series" ChartType="Line" Font="Trebuchet MS, 12pt, style=Bold" ChartArea="main_Area" IsValueShownAsLabel="true"></asp:Series>
+                                   </Series>
 
-                               <Titles>
-                                    <asp:Title Font="Trebuchet MS, 10pt, style=Bold" Text="Boredom Level of Lecture"></asp:Title>
-                               </Titles>
+                                   <Titles>
+                                        <asp:Title Font="Trebuchet MS, 10pt, style=Bold"></asp:Title>
+                                   </Titles>
 
-                               <ChartAreas>
-                                    <asp:ChartArea Name="main_Area">
-                                        <AxisX Title="Time" TitleFont="Trebuchet MS, 10pt, style=Bold"></AxisX>
-                                        <AxisY Title="Boredom Level" TitleFont="Trebuchet MS, 10pt, style=Bold"></AxisY>
-                                    </asp:ChartArea>
-                               </ChartAreas>
-                          </asp:Chart>
+                                   <ChartAreas>
+                                        <asp:ChartArea Name="main_Area">
+                                            <AxisX Title="Time" TitleFont="Trebuchet MS, 10pt, style=Bold"></AxisX>
+                                            <AxisY Title="Boredom Level" TitleFont="Trebuchet MS, 10pt, style=Bold"></AxisY>
+                                        </asp:ChartArea>
+                                   </ChartAreas>
+                              </asp:Chart>
+                            </div>
                         </div>
                     </div>
                 </div>
