@@ -20,7 +20,7 @@
             <asp:Image runat="server" ImageUrl="~/Images/Banner.png" CssClass="img-responsive img-centered" />
            
             <div class="col-md-12">
-                <div class="panel panel-primary">
+                <div class="panel panel-info">
                     <div class="panel-heading">
                         <h3 class="panel-title">Boredom Level of Lecture</h3>
                     </div>
@@ -30,9 +30,11 @@
                                 <asp:FileUpload ID="FileUpload" runat="server" AllowMultiple="true"/>
                                 <br />
                                 <asp:Button runat="server" ID="btn_Upload" Text="Upload" CssClass="btn btn-success" OnClick="btn_Upload_Click" />
+                                <br /><br />
+                                <asp:Label ID="lbl_Score" runat="server"></asp:Label>
                             </div>
                             <div class="form-group">
-                                <asp:Chart ID="cht_BarCategory" Height="400px" Width="480px" runat="server">
+                                <asp:Chart ID="cht_BarCategory" Height="400px" Width="880px" runat="server">
                                    <Series>
                                         <asp:Series Name="main_Series" ChartType="Line" Font="Trebuchet MS, 12pt, style=Bold" ChartArea="main_Area" IsValueShownAsLabel="true"></asp:Series>
                                    </Series>
@@ -43,8 +45,8 @@
 
                                    <ChartAreas>
                                         <asp:ChartArea Name="main_Area">
-                                            <AxisX Title="Time" TitleFont="Trebuchet MS, 10pt, style=Bold"></AxisX>
-                                            <AxisY Title="Boredom Level" TitleFont="Trebuchet MS, 10pt, style=Bold"></AxisY>
+                                            <AxisX Title="Time (Minute)" TitleFont="Trebuchet MS, 10pt, style=Bold"></AxisX>
+                                            <AxisY Title="Boredom Level %" TitleFont="Trebuchet MS, 10pt, style=Bold"></AxisY>
                                         </asp:ChartArea>
                                    </ChartAreas>
                               </asp:Chart>

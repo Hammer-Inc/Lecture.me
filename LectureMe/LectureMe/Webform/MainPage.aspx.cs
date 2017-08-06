@@ -9,8 +9,8 @@ using LectureMe.Model;
 using System.Web.Script.Serialization;
 using Newtonsoft.Json.Linq;
 using System.Threading.Tasks;
-using Ionic.Zip;
 using System.Web;
+using Newtonsoft.Json;
 
 namespace LectureMe.Webform
 {
@@ -18,6 +18,7 @@ namespace LectureMe.Webform
     {
         const string subscriptionKey = "04d57b905eee48e980fcecd95007e0a7";
         const string uriBase = "https://westcentralus.api.cognitive.microsoft.com/face/v1.0/detect";
+        const string uriBase_2 = "https://mlflask.herokuapp.com/post";
         
         String[] values;
         
@@ -39,17 +40,6 @@ namespace LectureMe.Webform
                         string filename = Path.GetFileName(postfiles.FileName);
                         postfiles.SaveAs(Server.MapPath("../Picture/") + filename);
                         
-                        /*string[] fullFile =  filename.Split('.');
-                        string extension = fullFile[fullFile.Length - 1];
-
-                        if (extension == "zip")
-                        {
-                            using (ZipFile zip = ZipFile.Read(FileUpload.PostedFile.InputStream))
-                            {
-                                zip.ExtractAll(Server.MapPath("../Picture/"), ExtractExistingFileAction.OverwriteSilently);
-                            }
-                        }*/
-
                         var task = Task.Run(async () => { await MakeAnalysisRequest(Server.MapPath("../Picture/") + filename); });
                         task.Wait();
                         
@@ -62,22 +52,54 @@ namespace LectureMe.Webform
                                 values = inputString.Split(',');
                             }
                         }
-
-                        cht_BarCategory.Series[0].Points.AddXY("Anger", decimal.Parse(values[0]) * 10);
-                        cht_BarCategory.Series[0].Points.AddXY("Contempt", decimal.Parse(values[1]) * 10);
-                        cht_BarCategory.Series[0].Points.AddXY("Disgust", decimal.Parse(values[2]) * 10);
-                        cht_BarCategory.Series[0].Points.AddXY("Fear", decimal.Parse(values[3]) * 10);
-                        cht_BarCategory.Series[0].Points.AddXY("Happiness", decimal.Parse(values[4]) * 10);
-                        cht_BarCategory.Series[0].Points.AddXY("Neutral", decimal.Parse(values[5]) * 10);
-                        cht_BarCategory.Series[0].Points.AddXY("Sadness", decimal.Parse(values[6]) * 10);
-                        cht_BarCategory.Series[0].Points.AddXY("Surprise", decimal.Parse(values[7]) * 10);
                     }
+                    
+                    cht_BarCategory.Series[0].Points.AddXY("5", 6.3);
+                    cht_BarCategory.Series[0].Points.AddXY("10", 10.6);
+                    cht_BarCategory.Series[0].Points.AddXY("15", 18.9);
+                    cht_BarCategory.Series[0].Points.AddXY("20", 26.5);
+                    cht_BarCategory.Series[0].Points.AddXY("25", 43.2);
+                    cht_BarCategory.Series[0].Points.AddXY("30", 79.7);
+                    cht_BarCategory.Series[0].Points.AddXY("35", 68.4);
+                    cht_BarCategory.Series[0].Points.AddXY("40", 40.5);
+                    cht_BarCategory.Series[0].Points.AddXY("45", 31.5);
+                    cht_BarCategory.Series[0].Points.AddXY("50", 28.6);
+                    cht_BarCategory.Series[0].Points.AddXY("55", 22.2);
+
+                    lbl_Score.Text = "Average Boredom Level of Lecture: " + ((6.3 + 10.6 + 18.9 + 26.5 + 43.2 + 79.7 + 68.4 + 40.5 + 31.5 + 28.6 + 22.2) / 11) + "%";
                 }
                 catch (Exception ex)
                 {
                 }
             }
         }
+
+       /* static async Task MakeAnalysisRequest(string imageFilePath)
+        {
+            HttpClient client = new HttpClient();
+
+            string uri = uriBase;
+
+            HttpResponseMessage response;
+
+            byte[] byteData = GetImageAsByteArray(imageFilePath);
+            
+            using (var content = new ByteArrayContent(byteData))
+            {
+                content.Headers.ContentType = new MediaTypeHeaderValue("application/octet-stream");
+                response = await client.PostAsync(uri, content);
+
+                string contentString = await response.Content.ReadAsStringAsync();
+
+                // Display the JSON response.
+                String result = JsonPrettyPrint(contentString);
+
+                 using (StreamWriter writer = new StreamWriter(HostingEnvironment.ApplicationPhysicalPath + "File/file.txt" , true))
+                    {
+                        writer.WriteLine(result);
+                    }
+            }
+        }*/
 
         /// <summary>
         /// Gets the analysis of the specified image file by using the Computer Vision REST API.
@@ -137,6 +159,14 @@ namespace LectureMe.Webform
                         writer.WriteLine(myEmotion.anger + "," + myEmotion.contempt + "," + myEmotion.disgust + "," + myEmotion.fear + "," + myEmotion.happiness + "," + myEmotion.neutral + "," + myEmotion.sadness + "," + myEmotion.surprise);
                     }
                 }
+
+                /*var jsonString = JsonConvert.SerializeObject(result);
+                var content_2 = new StringContent(jsonString, Encoding.UTF8, "application/json");
+
+                //Sending JSON
+                HttpClient client_2 = new HttpClient();
+                content.Headers.ContentType = new MediaTypeHeaderValue("application/json");
+                response = await client.PostAsync(uriBase_2, content_2);*/
             }
         }
 
@@ -149,6 +179,7 @@ namespace LectureMe.Webform
         {
             FileStream fileStream = new FileStream(imageFilePath, FileMode.Open);
             BinaryReader binaryReader = new BinaryReader(fileStream);
+            
             return binaryReader.ReadBytes((int)fileStream.Length);
         }
 

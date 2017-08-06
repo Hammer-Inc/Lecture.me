@@ -40,6 +40,15 @@ namespace LectureMe.Webform {
         protected global::System.Web.UI.WebControls.Button btn_Upload;
         
         /// <summary>
+        /// lbl_Score control.
+        /// </summary>
+        /// <remarks>
+        /// Auto-generated field.
+        /// To modify move field declaration from designer file to code-behind file.
+        /// </remarks>
+        protected global::System.Web.UI.WebControls.Label lbl_Score;
+        
+        /// <summary>
         /// cht_BarCategory control.
         /// </summary>
         /// <remarks>
